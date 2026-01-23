@@ -1,0 +1,25 @@
+# --- ANGULAR ---
+node_modules/
+dist/
+.angular/
+.vscode/
+package-lock.json
+*.log
+
+# --- .NET / C# ---
+bin/
+obj/
+.vs/
+*.user
+*.userosscache
+*.suo
+*.pdb
+
+# --- SECURITY ---
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# --- OS FILES ---
+.DS_Store
+Thumbs.db
