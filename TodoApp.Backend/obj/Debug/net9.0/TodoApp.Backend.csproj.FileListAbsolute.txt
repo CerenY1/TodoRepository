@@ -152,3 +152,9 @@ C:\Users\user\Desktop\ToDoList\TodoApp.Backend\obj\Debug\net9.0\refint\TodoApp.B
 C:\Users\user\Desktop\ToDoList\TodoApp.Backend\obj\Debug\net9.0\TodoApp.Backend.pdb
 C:\Users\user\Desktop\ToDoList\TodoApp.Backend\obj\Debug\net9.0\TodoApp.Backend.genruntimeconfig.cache
 C:\Users\user\Desktop\ToDoList\TodoApp.Backend\obj\Debug\net9.0\ref\TodoApp.Backend.dll
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\obj\Debug\net9.0\TodoApp.Backend.sourcelink.json
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\bin\Debug\net9.0\MediatR.dll
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\bin\Debug\net9.0\MediatR.Contracts.dll
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\user\Desktop\ToDoList\TodoApp.Backend\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll

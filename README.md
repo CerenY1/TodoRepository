@@ -2,6 +2,9 @@
 
 <p align="center">
   <br>
+  <img src="screenshot/Screenshot2.png" alt="To-Do App Preview" width="850" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+  <br>
+  <br>
   <img src="screenshot/Screenshot.png" alt="To-Do App Preview" width="850" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
   <br>
 </p>

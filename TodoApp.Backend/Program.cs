@@ -1,18 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using TodoApp.Backend.Application.Interfaces;
-using TodoApp.Backend.Infrasturcture.Persistance;
-using TodoApp.Backend.Application.Handlers.Queries;
-using TodoApp.Backend.Application.Handlers.Commands;
+using TodoApp.Backend.Entities.Interfaces;
+using TodoApp.Backend.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
 builder.Services.AddScoped<IToDoRepository, ToDoRepository>();
-
-builder.Services.AddScoped<GetAllTodosQueryHandler>();
-builder.Services.AddScoped<CreateTodoCommandHandler>();
-
-builder.Services.AddScoped<UpdateTodoCommandHandler>();
-builder.Services.AddScoped<DeleteTodoCommandHandler>();
-builder.Services.AddScoped<GetTodoByIdQueryHandler>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -22,11 +16,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policyBuilder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        options.AddPolicy("AllowAngular",
+                policy => policy.WithOrigins("http://localhost:4200")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
     });
 });
 
@@ -39,7 +34,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); 
+app.UseCors("AllowAngular");
+
 app.MapControllers();   
 
 app.Run();

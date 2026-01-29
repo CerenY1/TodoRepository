@@ -1,0 +1,108 @@
+.background-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 20px;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.65); 
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+  
+  width: 100%;
+  max-width: 420px;
+  padding: 50px 40px;
+  border-radius: 24px;
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.login-header {
+  margin-bottom: 35px;
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #2d3436;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    margin: 10px 0 0;
+    color: #636e72;
+    font-size: 1rem;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    color: #2d3436;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #b2bec3;
+    }
+
+    &:focus {
+      background: #fff;
+      border-color: #74b9ff;
+      box-shadow: 0 8px 25px rgba(116, 185, 255, 0.25);
+      transform: scale(1.02);
+    }
+  }
+}
+
+.btn-login {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: #2d3436;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 20px rgba(45, 52, 54, 0.2);
+
+  &:hover {
+    background: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+}
