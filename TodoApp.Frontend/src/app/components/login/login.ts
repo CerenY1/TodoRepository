@@ -13,30 +13,43 @@ import { TodoService } from '../../services/todo';
 })
 export class LoginComponent {
   email: string = '';
+  password: string = '';
+  isRegisterMode: boolean = false;
 
-  constructor(
-    private todoService: TodoService,
-    private router: Router
-  ) {}
+  constructor(private todoService: TodoService, private router: Router) {}
 
-  login() {
-    if (!this.email.trim()) {
-      alert("Please enter an email address!");
+  toggleMode() {
+    this.isRegisterMode = !this.isRegisterMode;
+  }
+
+  submit() {
+    if (!this.email || !this.password) {
+      alert("Please fill in all fields!");
+      return;
+    }
+    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    if (!emailPattern.test(this.email)) {
+      alert("Invalid email format!");
       return;
     }
 
-    this.todoService.login(this.email).subscribe({
-      next: (userId) => {
-        console.log("Login successful, UserID:", userId);
-        
-        localStorage.setItem('userId', userId);
-        
-        this.router.navigate(['/todo-list']); 
-      },
-      error: (err) => {
-        console.error("Login error:", err);
-        alert("Login failed! Is the backend running?");
-      }
-    });
+    if (this.isRegisterMode) {
+      this.todoService.register(this.email, this.password).subscribe({
+        next: () => {
+          alert("Registration successful! You can now log in.");
+          this.isRegisterMode = false;
+        },
+        error: (err) => alert("Registration failed. This email might already be in use.")
+      });
+    } else {
+      this.todoService.login(this.email, this.password).subscribe({
+        next: (res: any) => { 
+          const userId = typeof res === 'object' ? res.userId : res; 
+          localStorage.setItem('userId', userId);
+          this.router.navigate(['/todo-list']);
+        },
+        error: () => alert("Login failed! Incorrect email or password.")
+      });
+    }
   }
 }

@@ -51,6 +51,21 @@
   gap: 20px;
 }
 
+.error-msg {
+  color: #ff7675;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  text-align: left;
+}
+.toggle-mode {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #0984e3;
+  cursor: pointer;
+  text-decoration: underline;
+  &:hover { color: #74b9ff; }
+}
+
 .input-group {
   input {
     width: 100%;

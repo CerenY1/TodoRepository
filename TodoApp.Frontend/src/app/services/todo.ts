@@ -30,8 +30,13 @@ export class TodoService {
 
   constructor(private http: HttpClient) { }
 
-  login(email: string): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/login`, { email });
+
+  login(email: string, password: string): Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/login`, { email, password });
+  }
+
+  register(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { email, password });
   }
 
   getAll(userId: string): Observable<Todo[]> {

@@ -16,7 +16,14 @@ public class TodoController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
-        return Ok(await _mediator.Send(command));
+        var userId = await _mediator.Send(command);
+
+        if (userId == Guid.Empty)
+        {
+            return BadRequest("User not found or incorrect password!");
+        }
+
+        return Ok(userId);
     }
 
     [HttpGet]
@@ -46,8 +53,15 @@ public class TodoController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await _mediator.Send(new GetTodoByIdQuery(id)); // Yukarıda oluşturduğumuz Query
+        var result = await _mediator.Send(new GetTodoByIdQuery(id)); 
         if (result == null) return NotFound();
         return Ok(result);
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return result ? Ok("Registration successful") : BadRequest("User already exists.");
     }
 }

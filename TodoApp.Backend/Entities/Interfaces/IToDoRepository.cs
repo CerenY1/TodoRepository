@@ -9,5 +9,6 @@ public interface IToDoRepository
     Task AddAsync(Todo todo);
     Task UpdateAsync(Todo todo);
     Task DeleteAsync(Guid id);
-    Task<User> GetOrCreateUserAsync(string email);
+    Task<User?> GetUserByEmailAsync(string email); 
+    Task AddUserAsync(User user); 
 }

@@ -13,13 +13,13 @@ import { TodoService, Todo } from '../../services/todo';
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
-  newTodo = { title: '', description: '', isCompleted: false };
-  
   userId: string | null = null;
   today: Date = new Date();
 
+  isDialogOpen = false;
   editingTodoId: string | null = null;
-  originalTodoData: Todo | null = null;
+  
+  currentTodo: any = { title: '', description: '' }; 
 
   constructor(
     private todoService: TodoService,
@@ -42,7 +42,6 @@ export class TodoListComponent implements OnInit {
 
   getTodos() {
     if (!this.userId) return;
-    
     this.todoService.getAll(this.userId).subscribe({
       next: (res) => {
         this.zone.run(() => {
@@ -50,107 +49,98 @@ export class TodoListComponent implements OnInit {
           this.cdr.detectChanges();
         });
       },
-      error: (err) => console.error("Failed to load list:", err) 
+      error: (err) => console.error("Failed to load list:", err)
     });
   }
 
-  addTodo() {
-    if (!this.newTodo.title.trim() || !this.userId) {
-      alert("Please enter a title!"); 
+  openDialog(todo?: Todo) {
+    this.isDialogOpen = true;
+    if (todo) {
+      this.editingTodoId = todo.id;
+      this.currentTodo = { ...todo }; 
+    } else {
+      this.editingTodoId = null;
+      this.currentTodo = { title: '', description: '' };
+    }
+  }
+
+  closeDialog() {
+    this.isDialogOpen = false;
+    this.currentTodo = { title: '', description: '' };
+    this.editingTodoId = null;
+  }
+
+  saveTodo() {
+    if (!this.currentTodo.title.trim()) {
+      alert("Title is required!");
       return;
     }
 
-    const todoToSend = {
-      title: this.newTodo.title,
-      description: this.newTodo.description,
-      userId: this.userId
-    };
+    if (this.editingTodoId) {
+      const updateModel = {
+        id: this.editingTodoId,
+        title: this.currentTodo.title,
+        description: this.currentTodo.description,
+        isCompleted: this.currentTodo.isCompleted,
+        userId: this.userId! 
+      };
+      
+      this.todoService.update(updateModel).subscribe({
+        next: () => {
+          this.getTodos();
+          this.closeDialog();
+        },
+        error: (err) => alert("Update failed!")
+      });
 
-    this.todoService.create(todoToSend).subscribe({
-      next: (res) => {
-        this.newTodo = { title: '', description: '', isCompleted: false };
-        this.getTodos(); 
-      },
-      error: (err) => console.error("Error adding task:", err) 
-    });
+    } else {
+      const newModel = {
+        title: this.currentTodo.title,
+        description: this.currentTodo.description,
+        userId: this.userId!
+      };
+
+      this.todoService.create(newModel).subscribe({
+        next: () => {
+          this.getTodos();
+          this.closeDialog();
+        },
+        error: (err) => alert("Create failed!")
+      });
+    }
   }
 
   deleteTodo(id: string) {
     if (confirm("Are you sure you want to delete this task?")) {
       const backupList = [...this.todos];
-      this.todos = this.todos.filter(t => t.id !== id);
-      this.cdr.detectChanges();
-
+      this.todos = this.todos.filter(t => t.id !== id); 
+      
       this.todoService.delete(id).subscribe({
         error: (err) => {
-          console.error("Deletion failed, reverting...", err); 
+          console.error("Deletion failed, reverting...", err);
           this.todos = backupList;
-          this.cdr.detectChanges();
-          alert("Failed to delete task."); 
+          alert("Failed to delete task.");
         }
       });
     }
   }
 
-  startEdit(todo: Todo) {
-    if (this.editingTodoId) this.cancelEdit();
-    this.editingTodoId = todo.id;
-    this.originalTodoData = { ...todo };
-    this.cdr.detectChanges();
-  }
-
-  cancelEdit() {
-    if (this.editingTodoId && this.originalTodoData) {
-      const index = this.todos.findIndex(t => t.id === this.editingTodoId);
-      if (index > -1) {
-        this.todos[index] = { ...this.originalTodoData };
-      }
-    }
-    this.editingTodoId = null;
-    this.originalTodoData = null;
-    this.cdr.detectChanges();
-  }
-
-  saveEdit(todo: Todo) {
-    if (!todo.title.trim()) {
-      alert("Title cannot be empty!"); 
-      return;
-    }
-
-    this.editingTodoId = null;
-    this.originalTodoData = null;
-    this.cdr.detectChanges();
-
-    this.todoService.update(todo).subscribe({
-      error: (err) => {
-        console.error("Update error:", err); 
-        alert("Failed to save!"); 
-        this.startEdit(todo);
-      }
-    });
-  }
-
   toggleComplete(todo: Todo) {
-    if (this.editingTodoId === todo.id) return;
-
     todo.isCompleted = !todo.isCompleted;
-    this.cdr.detectChanges();
-
+    
     const updateModel = {
       id: todo.id,
       title: todo.title,
       description: todo.description || "",
       isCompleted: todo.isCompleted,
-      userId: this.userId
+      userId: this.userId!
     };
 
     this.todoService.update(updateModel).subscribe({
-      next: () => console.log("Success"), 
       error: (err) => {
         console.error("Error:", err);
         todo.isCompleted = !todo.isCompleted;
-        this.cdr.detectChanges();
-        alert("Update failed."); 
+        alert("Update failed.");
       }
     });
   }
